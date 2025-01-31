@@ -2,15 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Send, Sparkles, Layout } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-// Add cookie utility functions
-const setCookie = (name: string, value: string, days = 7, path = '/') => {
-  const domain = window.location.hostname;
-  // Support subdomains by using the main domain
-  const cookieDomain = domain === 'localhost' ? domain : '.' + domain.split('.').slice(-2).join('.');
-  
-  const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=${path}; domain=${cookieDomain}`;
-};
+function setCookie(name: string, value: string, inIFrame = false, expiryMinutes?: number) {
+  let expires = '';
+  if (expiryMinutes) {
+    const date = new Date();
+    date.setTime(date.getTime() + expiryMinutes * 60 * 1000);
+    expires = '; expires=' + date.toUTCString();
+  }
+
+  if (inIFrame) {
+    return (document.cookie = `${name}=${value || ''}${expires}; path=/; SameSite=None; Secure`);
+  }
+
+  document.cookie = `${name}=${value || ''}${expires}; path=/`;
+}
 
 interface Template {
   id: string;
@@ -108,18 +113,18 @@ function PromptPage() {
     
     try {
       // Set AI cookies first
-      await fetch(`${import.meta.env.VITE_API_URL}/api/ai/onboarding/set-ai-cookie`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          tj_ai_prompt: prompt,
-        })
-      });
+      // await fetch(`${import.meta.env.VITE_API_URL}/api/ai/onboarding/set-ai-cookie`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   credentials: 'include',
+      //   body: JSON.stringify({
+      //     tj_ai_prompt: prompt,
+      //   })
+      // });
       
-      // setCookie('tj_ai_prompt', prompt);
+      setCookie('tj_ai_prompt', prompt);
       
       const hasSession = await checkSession();
       if (!hasSession) {
