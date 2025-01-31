@@ -17,7 +17,7 @@ function LoginPage() {
     setError('');
     
     try {
-      const response = await fetch('http://localhost:3000/api/authenticate', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/authenticate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ function LoginPage() {
       }
 
       // If login successful, redirect to ToolJet
-      window.location.href = 'http://localhost:8082/';
+      window.location.href = import.meta.env.VITE_TOOLJET_URL;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during login');
     } finally {

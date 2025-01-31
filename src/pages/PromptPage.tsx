@@ -39,7 +39,7 @@ function PromptPage() {
     const fetchTemplates = async () => {
       setIsLoadingTemplates(true);
       try {
-        const response = await fetch('http://localhost:3000/api/library_apps', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/library_apps`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -63,7 +63,7 @@ function PromptPage() {
   useEffect(() => {
     const setAICookies = async () => {
       try {
-        await fetch('http://localhost:3000/api/ai/onboarding/set-ai-cookie', {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/ai/onboarding/set-ai-cookie`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ function PromptPage() {
 
   const checkSession = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/session', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/session`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -92,7 +92,7 @@ function PromptPage() {
       });
       
       if (response.ok) {
-        window.location.href = 'http://localhost:8082';
+        window.location.href = import.meta.env.VITE_TOOLJET_URL;
         return true;
       }
       return false;

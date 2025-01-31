@@ -28,7 +28,7 @@ function SignupPage() {
     setError('');
     
     try {
-      const response = await fetch('http://localhost:3000/api/ai/onboarding', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ai/onboarding`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ function SignupPage() {
       }
 
       const data = await response.json();
-      window.location.href = 'http://localhost:8082/';
+      window.location.href = import.meta.env.VITE_TOOLJET_URL;
       navigate('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during signup');
