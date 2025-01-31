@@ -106,15 +106,31 @@ function PromptPage() {
     e.preventDefault();
     setIsLoading(true);
     
-    setCookie('tj_ai_prompt', prompt);
-    
-    const hasSession = await checkSession();
-    if (!hasSession) {
-      navigate('/signup');
+    try {
+      // Set AI cookies first
+      await fetch(`${import.meta.env.VITE_API_URL}/api/ai/onboarding/set-ai-cookie`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          tj_ai_prompt: prompt,
+        })
+      });
+      
+      // setCookie('tj_ai_prompt', prompt);
+      
+      const hasSession = await checkSession();
+      if (!hasSession) {
+        navigate('/signup');
+      }
+    } catch (error) {
+      console.error('Error setting AI cookies:', error);
+    } finally {
+      setIsLoading(false);
+      setPrompt('');
     }
-    
-    setIsLoading(false);
-    setPrompt('');
   };
 
   const handleExampleClick = (example: string) => {
@@ -123,14 +139,31 @@ function PromptPage() {
 
   const handleTemplateClick = async (templateId: string) => {
     setIsLoading(true);
-    setCookie('tj_template_id', templateId);
     
-    const hasSession = await checkSession();
-    if (!hasSession) {
-      navigate('/signup');
+    try {
+      // Set AI cookies first
+      await fetch(`${import.meta.env.VITE_API_URL}/api/ai/onboarding/set-ai-cookie`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          tj_template_id: templateId,
+        })
+      });
+      
+      // setCookie('tj_template_id', templateId);
+      
+      const hasSession = await checkSession();
+      if (!hasSession) {
+        navigate('/signup');
+      }
+    } catch (error) {
+      console.error('Error setting AI cookies:', error);
+    } finally {
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
 
   return (
