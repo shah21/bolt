@@ -38,7 +38,7 @@ const GoogleSSOLoginButton = forwardRef<{ triggerLogin: (e?: React.MouseEvent) =
       redirect_uri: `${import.meta.env.VITE_TOOLJET_URL}/sso/google${props.configId ? `/${props.configId}` : ''}`,
       response_type: 'id_token',
       scope: 'email profile',
-      client_id: '370672010807-ageu661s9eg7ds2k0iio4d91p9q7kiim.apps.googleusercontent.com',
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       nonce: randomString(10),
       state: 'tj_api_source=ai_onboarding',
     });
